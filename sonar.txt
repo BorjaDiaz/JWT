@@ -1,0 +1,2 @@
+mvn sonar:sonar -Dsonar.projectKey=jwt -Dsonar.host.url=http://localhost:9000 -Dsonar.login=96e1e8b0080f7458fad5abb68dc19fa3ab1e04ee
+sonar-scanner.properties -D "sonar.projectKey = javascript" -D "sonar.sources =." -D "sonar.host.url = http: // localhost: 9000" -D "sonar.login =96e1e8b0080f7458fad5abb68dc19fa3ab1e04ee"

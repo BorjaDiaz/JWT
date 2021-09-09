@@ -1,7 +1,7 @@
 package com.spring.jwt.service.implementation;
 
 import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,15 +47,17 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	public ResponseEntity<?> registrarUsuario(NuevoUsuario nuevoUsuario) {
 		
-		 Usuario usuario = new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getNombreUsuario(), nuevoUsuario.getEmail(),
+		Usuario usuario = new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getNombreUsuario(), nuevoUsuario.getEmail(),
 	                        passwordEncoder.encode(nuevoUsuario.getPassword()));
-	        Set<Rol> roles = new HashSet<>();
-	        roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).get());
-	        if(nuevoUsuario.getRoles().contains("admin"))
-	            roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).get());
-	        usuario.setRoles(roles);
-	        usuarioService.save(usuario);
-	        return new ResponseEntity<>(new Mensaje("usuario guardado"), HttpStatus.CREATED);
+        Set<Rol> roles = new HashSet<>();
+	       
+    	roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).orElse(null));
+        if(nuevoUsuario.getRoles().contains("admin"))
+            roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).orElse(null));
+        usuario.setRoles(roles);
+        usuarioService.save(usuario);
+        return new ResponseEntity<>(new Mensaje("usuario guardado"), HttpStatus.CREATED);
+	     
 	}
 
 	@Override
