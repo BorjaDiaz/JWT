@@ -15,9 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.spring.jwt.dto.JwtDto;
-import com.spring.jwt.dto.LoginUsuario;
+import com.spring.jwt.dto.Login;
 import com.spring.jwt.dto.Mensaje;
-import com.spring.jwt.dto.NuevoUsuario;
+import com.spring.jwt.dto.Signup;
 import com.spring.jwt.entity.Rol;
 import com.spring.jwt.entity.Usuario;
 import com.spring.jwt.enums.RolNombre;
@@ -45,14 +45,14 @@ public class AuthServiceImpl implements AuthService{
     JwtProvider jwtProvider;
 
 	@Override
-	public ResponseEntity<?> registrarUsuario(NuevoUsuario nuevoUsuario) {
+	public ResponseEntity<?> registrarUsuario(Signup signup) {
 		
-		Usuario usuario = new Usuario(nuevoUsuario.getNombre(), nuevoUsuario.getNombreUsuario(), nuevoUsuario.getEmail(),
-	                        passwordEncoder.encode(nuevoUsuario.getPassword()));
+		Usuario usuario = new Usuario(signup.getName(), signup.getUserName(), signup.getEmail(),
+	                        passwordEncoder.encode(signup.getPassword()));
         Set<Rol> roles = new HashSet<>();
 	       
     	roles.add(rolService.getByRolNombre(RolNombre.ROLE_USER).orElse(null));
-        if(nuevoUsuario.getRoles().contains("admin"))
+        if(signup.getRoles().contains("admin"))
             roles.add(rolService.getByRolNombre(RolNombre.ROLE_ADMIN).orElse(null));
         usuario.setRoles(roles);
         usuarioService.save(usuario);
@@ -61,9 +61,9 @@ public class AuthServiceImpl implements AuthService{
 	}
 
 	@Override
-	public ResponseEntity<?> LogearUsuario(LoginUsuario loginUsuario) {
+	public ResponseEntity<?> LogearUsuario(Login loginUser) {
 		 Authentication authentication =
-	                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getNombreUsuario(), loginUsuario.getPassword()));
+	                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword()));
 	        SecurityContextHolder.getContext().setAuthentication(authentication);
 	        String jwt = jwtProvider.generateToken(authentication);
 	        UserDetails userDetails = (UserDetails)authentication.getPrincipal();

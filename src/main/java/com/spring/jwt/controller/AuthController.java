@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.spring.jwt.dto.LoginUsuario;
+import com.spring.jwt.dto.Login;
 import com.spring.jwt.dto.Mensaje;
-import com.spring.jwt.dto.NuevoUsuario;
+import com.spring.jwt.dto.Signup;
 import com.spring.jwt.service.AuthService;
 import com.spring.jwt.service.UsuarioService;
 
@@ -27,22 +27,22 @@ public class AuthController {
 	AuthService authService;
     
     @PostMapping("/signup")
-    public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
+    public ResponseEntity<?> nuevo(@Valid @RequestBody Signup signup, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity<>(new Mensaje("campos mal puestos o email inválido"), HttpStatus.BAD_REQUEST);
-        if(usuarioService.existsByNombreUsuario(nuevoUsuario.getNombreUsuario()))
+        if(usuarioService.existsByNombreUsuario(signup.getUserName()))
             return new ResponseEntity<>(new Mensaje("ese nombre ya existe"), HttpStatus.BAD_REQUEST);
-        if(usuarioService.existsByEmail(nuevoUsuario.getEmail()))
+        if(usuarioService.existsByEmail(signup.getEmail()))
             return new ResponseEntity<>(new Mensaje("ese email ya existe"), HttpStatus.BAD_REQUEST);
-        return authService.registrarUsuario(nuevoUsuario);
+        return authService.registrarUsuario(signup);
         
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult){
+    public ResponseEntity<?> login(@Valid @RequestBody Login loginUser, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity<>(new Mensaje("campos mal puestos"), HttpStatus.BAD_REQUEST);
-        return authService.LogearUsuario(loginUsuario);       
+        return authService.LogearUsuario(loginUser);       
     }
     
 }

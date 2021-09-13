@@ -2,18 +2,18 @@ package com.spring.jwt.dto;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginUsuario {
+public class Login {
     @NotBlank
-    private String nombreUsuario;
+    private String userName;
     @NotBlank
     private String password;
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getUserName() {
+        return userName;
     }
 
     public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+        this.userName = nombreUsuario;
     }
 
     public String getPassword() {
